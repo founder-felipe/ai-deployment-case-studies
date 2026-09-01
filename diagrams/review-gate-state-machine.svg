@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" role="img" aria-labelledby="t d">
+  <title id="t">Review gate — state machine</title>
+  <desc id="d">A generated defence is scored by an automated reviewer, then a tier decision compares the score against the configured auto-deliver threshold. In this deployment that threshold is set above the maximum achievable score, so the auto-deliver branch is unreachable and every document is queued for a human lawyer. An approval delivers the document and, above a score, promotes it into the benchmark set. A rejection is captured as a redacted lesson, injected into generation, and triggers exactly one automatic retry with the reviewer feedback in context; a second rejection escalates to a human instead of looping. Agreement between the automated reviewer and human decisions is tracked and can only notify that the threshold could be relaxed — it never relaxes it.</desc>
+  <style>
+    .bg{fill:#ffffff}
+    .node{fill:#ffffff;stroke:#94a3b8;stroke-width:1.5;rx:8}
+    .gate{fill:#eef2ff;stroke:#4338ca;stroke-width:1.8;rx:8}
+    .human{fill:#ecfdf5;stroke:#059669;stroke-width:1.8;rx:8}
+    .dead{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5;stroke-dasharray:5 4;rx:8}
+    .term{fill:#fff7ed;stroke:#ea580c;stroke-width:1.8;rx:8}
+    .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;fill:#0f172a;text-anchor:middle}
+    .s{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;fill:#64748b;text-anchor:middle}
+    .e{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#475569}
+    .ei{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#4338ca;font-weight:600}
+    .flow{stroke:#64748b;stroke-width:1.6;fill:none;marker-end:url(#a)}
+    .flowd{stroke:#cbd5e1;stroke-width:1.6;fill:none;stroke-dasharray:5 4;marker-end:url(#ad)}
+    .flowr{stroke:#ea580c;stroke-width:1.6;fill:none;marker-end:url(#ar)}
+    .note{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#4338ca}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+    <marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#cbd5e1"/></marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="620"/>
+
+  <rect class="node" x="330" y="28" width="240" height="46"/>
+  <text class="t" x="450" y="57">defence generated</text>
+
+  <path class="flow" d="M450,74 L450,106"/>
+
+  <rect class="node" x="330" y="106" width="240" height="52"/>
+  <text class="t" x="450" y="128">automated review</text>
+  <text class="s" x="450" y="146">weighted criteria, temperature zero</text>
+
+  <path class="flow" d="M450,158 L450,190"/>
+
+  <rect class="gate" x="300" y="190" width="300" height="58"/>
+  <text class="t" x="450" y="212">tier decision — score vs threshold</text>
+  <text class="s" x="450" y="232" style="fill:#4338ca">threshold configured above max achievable score</text>
+
+  <!-- unreachable auto branch -->
+  <path class="flowd" d="M600,219 L742,219"/>
+  <text class="e" x="612" y="211" style="fill:#94a3b8">score ≥ threshold</text>
+  <rect class="dead" x="742" y="196" width="130" height="46"/>
+  <text class="t" x="807" y="215" style="fill:#94a3b8">auto-deliver</text>
+  <text class="s" x="807" y="232" style="fill:#94a3b8">unreachable here</text>
+
+  <!-- human branch -->
+  <path class="flow" d="M450,248 L450,286"/>
+  <text class="ei" x="460" y="272">always taken</text>
+
+  <rect class="human" x="320" y="286" width="260" height="52"/>
+  <text class="t" x="450" y="308">review queue + notification</text>
+  <text class="s" x="450" y="326">a lawyer decides in the console</text>
+
+  <path class="flow" d="M450,338 L450,372"/>
+  <rect class="human" x="320" y="372" width="260" height="46"/>
+  <text class="t" x="450" y="400">approve or reject</text>
+
+  <!-- approve -->
+  <path class="flow" d="M580,395 L700,395 L700,452"/>
+  <text class="e" x="590" y="387">approve</text>
+  <rect class="term" x="600" y="452" width="200" height="52"/>
+  <text class="t" x="700" y="474">deliver to client</text>
+  <text class="s" x="700" y="492">above a score → benchmark set</text>
+
+  <!-- reject -->
+  <path class="flowr" d="M320,395 L200,395 L200,452"/>
+  <text class="e" x="216" y="387" style="fill:#ea580c">reject</text>
+  <rect class="node" x="100" y="452" width="200" height="52"/>
+  <text class="t" x="200" y="474">lesson captured, redacted</text>
+  <text class="s" x="200" y="492">injected into similar future cases</text>
+
+  <path class="flowr" d="M200,504 L200,562 L60,562 L60,132 L330,132"/>
+  <text class="e" x="96" y="584" style="fill:#ea580c">exactly one automatic retry, reviewer feedback in context</text>
+
+  <text class="e" x="306" y="470" style="fill:#ea580c">second reject</text>
+  <text class="e" x="306" y="486" style="fill:#ea580c">→ escalate to a human, never loop</text>
+
+  <!-- agreement note -->
+  <rect class="gate" x="620" y="28" width="252" height="130" style="fill:#f8fafc;stroke:#cbd5e1"/>
+  <text class="t" x="746" y="52" style="text-anchor:middle">agreement tracking</text>
+  <text class="note" x="636" y="76">automated score vs human decision</text>
+  <text class="note" x="636" y="96">is measured over time. When</text>
+  <text class="note" x="636" y="116">agreement is high enough it</text>
+  <text class="note" x="636" y="136">NOTIFIES that the threshold</text>
+  <text class="note" x="636" y="152" style="font-weight:700">could be relaxed. It never relaxes it.</text>
+</svg>

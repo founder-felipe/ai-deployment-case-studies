@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600" role="img" aria-labelledby="t d">
+  <title id="t">Multi-tenant isolation — additive migration and deny-all row-level security</title>
+  <desc id="d">An additive schema migration introduces a tenant table and a membership table, adds a tenant foreign key to each operational table, backfills the existing client as tenant one, and scopes uniqueness per tenant instead of globally. Deny-all row-level security is enabled on the new tables with service-role-only access, and console auth is fail-closed asymmetric-key validation with an administrator allow-list. Two operational rules are called out: swapping a uniqueness constraint silently breaks the write path because the upsert helper still names the old conflict target, so schema and code ship as one atomic deploy with a rollback script written before the migration runs; and read-path scoping is deliberately deferred while there is a single tenant, but recorded as a hard prerequisite before a second tenant is onboarded, not as a nice-to-have.</desc>
+  <style>
+    .bg{fill:#ffffff}
+    .box{fill:#ffffff;stroke:#94a3b8;stroke-width:1.5;rx:7}
+    .new{fill:#eef2ff;stroke:#4338ca;stroke-width:1.8;rx:7}
+    .band{stroke:#cbd5e1;stroke-width:1.5;rx:10;fill:#f8fafc}
+    .warn{fill:#fff7ed;stroke:#ea580c;stroke-width:1.8;rx:8}
+    .t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;fill:#0f172a;text-anchor:middle}
+    .tl{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;fill:#0f172a}
+    .s{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;fill:#64748b;text-anchor:middle}
+    .h{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13.5px;font-weight:700;fill:#0f172a}
+    .p{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#475569}
+    .po{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#c2410c}
+    .fk{stroke:#4338ca;stroke-width:1.5;fill:none;marker-end:url(#a)}
+    .lock{stroke:#059669;stroke-width:1.8;fill:none;marker-end:url(#ag)}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4338ca"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#059669"/></marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="600"/>
+
+  <text class="h" x="30" y="34">Additive migration — nothing dropped, nothing renamed</text>
+
+  <!-- new tables -->
+  <rect class="new" x="30" y="52" width="230" height="56"/>
+  <text class="t" x="145" y="76">tenant</text><text class="s" x="145" y="94">new — existing client backfilled as #1</text>
+
+  <rect class="new" x="30" y="122" width="230" height="56"/>
+  <text class="t" x="145" y="146">membership</text><text class="s" x="145" y="164">user ↔ tenant, with role</text>
+
+  <!-- operational tables -->
+  <rect class="band" x="330" y="52" width="540" height="196"/>
+  <text class="h" x="350" y="76">operational tables</text>
+  <text class="p" x="350" y="94">each gains a tenant foreign key; uniqueness re-scoped per tenant</text>
+
+  <rect class="box" x="350" y="108" width="150" height="42"/><text class="t" x="425" y="134">conversations</text>
+  <rect class="box" x="516" y="108" width="150" height="42"/><text class="t" x="591" y="134">cases</text>
+  <rect class="box" x="682" y="108" width="168" height="42"/><text class="t" x="766" y="134">review queue</text>
+  <rect class="box" x="350" y="164" width="150" height="42"/><text class="t" x="425" y="190">documents</text>
+  <rect class="box" x="516" y="164" width="150" height="42"/><text class="t" x="591" y="190">events</text>
+  <rect class="box" x="682" y="164" width="168" height="42"/><text class="t" x="766" y="190">delivery meter</text>
+  <text class="p" x="350" y="222">delivery metering is idempotent by a uniqueness constraint, and wrapped so that</text>
+  <text class="p" x="350" y="238">a metering failure can never block a delivery</text>
+
+  <path class="fk" d="M260,80 L300,80" style="marker-end:none"/>
+  <path class="fk" d="M260,150 L300,150" style="marker-end:none"/>
+  <path class="fk" d="M300,80 L300,150" style="marker-end:none"/>
+  <path class="fk" d="M300,115 L330,115"/>
+
+  <!-- access control -->
+  <text class="h" x="30" y="292">Access control</text>
+  <rect class="band" x="30" y="308" width="400" height="150" style="fill:#ecfdf5;stroke:#059669"/>
+  <text class="tl" x="50" y="334">deny-all row-level security on every new table</text>
+  <text class="p" x="50" y="356">no policy grants the anonymous or authenticated role</text>
+  <text class="p" x="50" y="376">any access at all; the service role bypasses RLS and is</text>
+  <text class="p" x="50" y="396">the only path in. Anonymous access verified denied.</text>
+  <text class="tl" x="50" y="424">console auth: fail-closed asymmetric-key validation</text>
+  <text class="p" x="50" y="444">with an administrator allow-list</text>
+
+  <path class="lock" d="M430,383 L500,383 L500,248"/>
+
+  <!-- the two rules -->
+  <rect class="warn" x="470" y="288" width="400" height="122"/>
+  <text class="tl" x="490" y="314" style="font-weight:700;fill:#9a3412">The constraint swap that breaks the write path</text>
+  <text class="po" x="490" y="336">Changing a uniqueness constraint silently breaks every</text>
+  <text class="po" x="490" y="354">write whose upsert helper still names the old conflict</text>
+  <text class="po" x="490" y="372">target. Schema change and code change therefore ship as</text>
+  <text class="po" x="490" y="390">ONE atomic deploy — rollback script written first.</text>
+
+  <rect class="warn" x="470" y="424" width="400" height="140" style="fill:#f8fafc;stroke:#64748b"/>
+  <text class="tl" x="490" y="450" style="font-weight:700">The deliberately deferred part</text>
+  <text class="p" x="490" y="472">Read-path scoping is a no-op with a single tenant, so it</text>
+  <text class="p" x="490" y="490">was not done in this change. It is written down as a HARD</text>
+  <text class="p" x="490" y="508">PREREQUISITE before a second tenant is onboarded.</text>
+  <text class="p" x="490" y="530" style="font-style:italic">A deferred correctness property that is not written down</text>
+  <text class="p" x="490" y="546" style="font-style:italic">as a blocker is a bug with a delay fuse.</text>
+</svg>

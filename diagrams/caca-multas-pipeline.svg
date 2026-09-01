@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" width="900" height="660" role="img" aria-labelledby="t d">
+  <title id="t">Traffic-fine defence pipeline — pattern-level architecture</title>
+  <desc id="d">Four layers. A messaging platform is the client channel. A workflow-automation engine owns the whole webhook layer: receive, normalise, drive the state machine, call the payment provider, deliver. A Python API service owns the judgement: conversational intake, document analysis, retrieval, defence generation, automated review, PDF rendering. A managed Postgres instance holds conversations, cases, the review queue, the legal knowledge base with its vector index, event logs and consent records. The seam between the workflow engine and the API service is a small number of deliberately frozen HTTP contracts.</desc>
+  <style>
+    .bg{fill:#ffffff}
+    .band{stroke:#cbd5e1;stroke-width:1.5;rx:10}
+    .b1{fill:#f1f5f9}.b2{fill:#eef2ff}.b3{fill:#ecfdf5}.b4{fill:#fff7ed}
+    .node{fill:#ffffff;stroke:#94a3b8;stroke-width:1.5;rx:7}
+    .lbl{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;fill:#0f172a}
+    .lbl-c{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12.5px;fill:#1e293b;text-anchor:middle}
+    .band-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13.5px;font-weight:700;fill:#0f172a}
+    .band-sub{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#64748b}
+    .seam{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#4338ca;font-weight:600;text-anchor:middle}
+    .flow{stroke:#64748b;stroke-width:1.6;fill:none;marker-end:url(#a)}
+    .seamline{stroke:#4338ca;stroke-width:1.6;fill:none;stroke-dasharray:6 4;marker-end:url(#ai)}
+    .cap{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11.5px;fill:#64748b}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4338ca"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="660"/>
+
+  <!-- Layer 1: client channel -->
+  <rect class="band b1" x="30" y="28" width="840" height="72"/>
+  <text class="band-title" x="48" y="52">Client channel</text>
+  <text class="band-sub" x="48" y="70">conversational medium — no forms, no validation, messages out of order</text>
+  <rect class="node" x="560" y="44" width="290" height="40"/>
+  <text class="lbl-c" x="705" y="69">Messaging platform (business API)</text>
+
+  <path class="flow" d="M450,100 L450,132"/>
+
+  <!-- Layer 2: workflow engine -->
+  <rect class="band b2" x="30" y="136" width="840" height="122"/>
+  <text class="band-title" x="48" y="160">Workflow-automation engine — owns the outside world</text>
+  <text class="band-sub" x="48" y="178">entire webhook layer; transport replaced twice without touching business logic</text>
+  <rect class="node" x="48" y="192" width="150" height="46"/><text class="lbl-c" x="123" y="220">receive + verify</text>
+  <rect class="node" x="212" y="192" width="150" height="46"/><text class="lbl-c" x="287" y="220">normalise event</text>
+  <rect class="node" x="376" y="192" width="150" height="46"/><text class="lbl-c" x="451" y="220">state machine</text>
+  <rect class="node" x="540" y="192" width="150" height="46"/><text class="lbl-c" x="615" y="220">payment provider</text>
+  <rect class="node" x="704" y="192" width="148" height="46"/><text class="lbl-c" x="778" y="220">delivery</text>
+
+  <!-- seam -->
+  <path class="seamline" d="M450,258 L450,300"/>
+  <text class="seam" x="450" y="284">frozen HTTP contracts</text>
+  <text class="cap" x="596" y="284">two systems, different change rates</text>
+
+  <!-- Layer 3: application -->
+  <rect class="band b3" x="30" y="304" width="840" height="180"/>
+  <text class="band-title" x="48" y="328">Python API service — owns the judgement</text>
+  <text class="band-sub" x="48" y="346">never sees a raw platform webhook; this is the part that has tests</text>
+
+  <rect class="node" x="48" y="362" width="192" height="52"/>
+  <text class="lbl-c" x="144" y="383">Conversational intake</text><text class="lbl-c" x="144" y="401" style="fill:#64748b;font-size:11px">collect + confirm; never fabricate</text>
+  <rect class="node" x="252" y="362" width="192" height="52"/>
+  <text class="lbl-c" x="348" y="383">Document analysis</text><text class="lbl-c" x="348" y="401" style="fill:#64748b;font-size:11px">vision extraction from photos</text>
+  <rect class="node" x="456" y="362" width="192" height="52"/>
+  <text class="lbl-c" x="552" y="383">Defence generation</text><text class="lbl-c" x="552" y="401" style="fill:#64748b;font-size:11px">against retrieved verified sources</text>
+  <rect class="node" x="660" y="362" width="192" height="52"/>
+  <text class="lbl-c" x="756" y="383">Automated review</text><text class="lbl-c" x="756" y="401" style="fill:#64748b;font-size:11px">weighted score, temperature zero</text>
+
+  <rect class="node" x="48" y="424" width="192" height="42"/><text class="lbl-c" x="144" y="450">Placeholder validator</text>
+  <rect class="node" x="252" y="424" width="192" height="42"/><text class="lbl-c" x="348" y="450">Retrieval over curated corpus</text>
+  <rect class="node" x="456" y="424" width="192" height="42"/><text class="lbl-c" x="552" y="450">PDF render + archival</text>
+  <rect class="node" x="660" y="424" width="192" height="42"/><text class="lbl-c" x="756" y="450">Delivery metering</text>
+
+  <path class="flow" d="M450,484 L450,516"/>
+
+  <!-- Layer 4: data -->
+  <rect class="band b4" x="30" y="520" width="840" height="112"/>
+  <text class="band-title" x="48" y="544">Managed Postgres</text>
+  <text class="band-sub" x="48" y="562">deny-all row-level security; service-role access only</text>
+  <rect class="node" x="48" y="576" width="150" height="40"/><text class="lbl-c" x="123" y="601">conversations</text>
+  <rect class="node" x="212" y="576" width="150" height="40"/><text class="lbl-c" x="287" y="601">cases</text>
+  <rect class="node" x="376" y="576" width="150" height="40"/><text class="lbl-c" x="451" y="601">review queue</text>
+  <rect class="node" x="540" y="576" width="150" height="40"/><text class="lbl-c" x="615" y="601">knowledge + vectors</text>
+  <rect class="node" x="704" y="576" width="148" height="40"/><text class="lbl-c" x="778" y="601">events + consent</text>
+</svg>
