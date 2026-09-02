@@ -4,7 +4,7 @@
 the documents and the payment, generates a written administrative defence, scores it,
 routes it through a human lawyer, and delivers the approved document back to the client.
 
-**Status:** deployed and in daily use by a real traffic-fine defence law firm in northern
+**Status:** deployed for a real traffic-fine defence law firm in northern
 Brazil `[CM-1: verified]`. The firm is not named here — no consent to name it is on file.
 
 **Why it is the case study I lead with:** almost none of the difficulty was in getting a

@@ -7,7 +7,7 @@ automating my own reporting work.
 **Why it is in a portfolio of deployments:** most failed AI rollouts I have watched failed
 on adoption, not capability. The tool worked; nobody changed how they worked. Being the
 person who had to actually move a room of engineers, administrators and managers from "I
-tried it once and it was wrong" to "I use it daily" is the part of AI deployment that does
+tried it once and it was wrong" to "I use it in my work" is the part of AI deployment that does
 not show up in a repository.
 
 **Scope of this page.** Everything here is at the level of statements that appear on my CV.

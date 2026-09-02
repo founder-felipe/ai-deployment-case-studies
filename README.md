@@ -19,7 +19,7 @@ once it is public — never from here before it exists.
 
 | Page | What it is | Status |
 |---|---|---|
-| [**caca-multas.md**](caca-multas.md) | Flagship. A WhatsApp-first legal document-generation pipeline deployed for a traffic-fine defence law firm in Brazil: the review gate, the citation policy, four production incidents, and handing the infrastructure to the client. | Deployed, in daily use |
+| [**caca-multas.md**](caca-multas.md) | Flagship. A WhatsApp-first legal document-generation pipeline deployed for a traffic-fine defence law firm in Brazil: the review gate, the citation policy, four production incidents, and handing the infrastructure to the client. | Deployed |
 | [**wsp-copilot-champion.md**](wsp-copilot-champion.md) | The enablement half. Internal AI training inside a global engineering consultancy, and what actually moved a room of sceptics. | Delivered |
 | [**car-detailing-crm.md**](car-detailing-crm.md) | Small, boring, and correct. Lead capture for a Perth mobile car-detailing business, and why the backend choice was made for feature two rather than feature one. | Live |
 | [**remediation-loop.md**](remediation-loop.md) | An agent that responds to production errors on a system I operate. 15 runs, a graduated autonomy policy, and a careful account of what the ledger does not prove. | Running |

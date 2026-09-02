@@ -32,7 +32,7 @@ repository, not copied from an older document.
 
 | ID | Claim | Class |
 |---|---|---|
-| CM-1 | Deployed for a real traffic-fine defence law firm in northern Brazil; reviewers use the console daily. | verified |
+| CM-1 | Deployed for a real traffic-fine defence law firm in northern Brazil; reviewers use the review console. | verified |
 | CM-2 | The deployment is configured so that every generated legal document requires human approval before delivery: the auto-deliver threshold is set above the maximum achievable score. This is a configuration of the deployment, not an invariant of the code — the code's default threshold is an ordinary score gate. | verified |
 | CM-3 | Legal citations are verified-only and fail closed: retrieval filters to citations marked verified, and unverified ones were deleted rather than shipped. | verified |
 | CM-4 | A reviewer-calibration harness exists and was run against a benchmark set of human-authored defences before the launch threshold policy was set. **No calibration numbers are published**: the stored output of that run could not be located when this repository was written, so the numeric result is withheld rather than quoted from memory. | verified |
